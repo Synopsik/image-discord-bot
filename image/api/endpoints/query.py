@@ -6,7 +6,7 @@ from image.api.models.Query import Query, AttachmentEnum
 router = APIRouter(prefix="/query", tags=["ai"])
 
 @router.get("/")
-async def query():
+async def query_get():
     """
     Handles the asynchronous GET request to query data and responds based on the 
     context of the operation. Executes conditional behavior to either return a 
@@ -29,7 +29,7 @@ async def query():
         print(e)
 
 @router.post("/")
-async def ask_llm(user_query: Query):
+async def query_post(user_query: Query):
     """
     Handles POST requests to process user queries and return responses generated
     by an AI assistant. Optionally, it can return the assistant's intermediate 
