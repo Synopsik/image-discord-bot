@@ -11,6 +11,6 @@ class AttachmentEnum(str, Enum):
     
 class Query(BaseModel):
     query: str = "Waduhek?"
-    attachment: list[AttachmentEnum] | None = None # Needs to be refactored for attachments w/ other
+    attachments: list[AttachmentEnum] | None = None # Needs to be refactored for attachments w/ other
     show_thoughts: bool = False # Provide thoughts in response, formatted cleanly
     
