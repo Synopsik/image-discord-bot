@@ -2,3 +2,6 @@ pydantic
 uvicorn
 fastapi
 mangum
+python-dotenv
+discord.py
+asyncpg
