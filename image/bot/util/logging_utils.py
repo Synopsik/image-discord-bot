@@ -2,7 +2,7 @@ import asyncio
 import logging
 from datetime import datetime
 
-from util.database_utils import execute
+from database_utils import execute
 
 def setup_logging(
         db_pool,
