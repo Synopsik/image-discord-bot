@@ -1,0 +1,14 @@
+services:
+  api:
+    build: ./api
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONUNBUFFERED=1
+  bot:
+    build: ./bot
+    environment:
+      - BOT_TOKEN=${BOT_TOKEN}
+      - LOCAL_ENV=${LOCAL_ENV}
+    depends_on:
+      - api
