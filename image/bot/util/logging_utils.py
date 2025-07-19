@@ -2,7 +2,7 @@ import asyncio
 import logging
 from datetime import datetime
 
-from image.util import database_utils
+from util.database_utils import execute
 
 def setup_logging(
         db_pool,
@@ -50,7 +50,7 @@ class DatabaseLogHandler(logging.Handler):
         insert_query = f"""
             INSERT INTO {self.table_name} (timestamp, logger, level, message)
         """
-        await database_utils.execute(
+        await execute(
             self.db_pool,
             insert_query,
             log_time.isoformat(),

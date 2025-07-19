@@ -6,7 +6,7 @@ import discord
 from discord.ext import commands
 from discord import app_commands
 
-from image.util.api_utils import query
+from util.api_utils import query
 
 class AgentCog(commands.Cog, name="Agent"):
     def __init__(self, bot, logger):

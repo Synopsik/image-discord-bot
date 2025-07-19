@@ -1,7 +1,7 @@
 from http.client import responses
 
 from fastapi import APIRouter
-from image.api.models.Query import Query, AttachmentEnum
+from models.Query import Query, AttachmentEnum
 
 router = APIRouter(prefix="/query", tags=["ai"])
 

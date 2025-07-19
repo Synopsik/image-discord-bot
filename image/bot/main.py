@@ -8,9 +8,9 @@ from discord.ext import commands
 from dotenv import load_dotenv
 load_dotenv()
 
-from image.util.logging_utils import setup_logging
-from image.bot.cogs.agent import AgentCog
-from image.bot.cogs.logging import LoggingCog
+from util.logging_utils import setup_logging
+from cogs.agent import AgentCog
+from cogs.logging import LoggingCog
 
 class DiscordBot(commands.Bot):
     def __init__(self, *cogs):
@@ -58,12 +58,12 @@ class DiscordBot(commands.Bot):
                         # Default case: if no names matches, no cog is added
                         self.logger.error(f"Cog {cog} not found.")
         except Exception as e:
-            print(f"Couldn't load cogs: {e}")
+            self.logger.error(f"Couldn't load cog: {e}")
             
     async def on_ready(self):
         guild_id = os.getenv("GUILD_ID")
         if guild_id:
-            await self.tree.sync(guild=discord.Object(id=int(guild_id)))
+            await self.tree.sync(guild=discord.Object(id=int(guild_id))) # This seems like it isn't working
             self.logger.debug(f"Synced Tree Commands with guild: {guild_id}")
         else:
             await self.tree.sync()
