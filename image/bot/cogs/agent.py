@@ -20,10 +20,14 @@ class AgentCog(commands.Cog, name="Agent"):
         self.logger.debug("Loaded Agent Cog")
         
     
-    @app_commands.command(name="query", description="Query the agent")
-    async def query_agent(self, interaction: discord.Interaction, query: str):
-        self.logger.debug(f"Queried Agent: {query}")
-        await interaction.response.send_message(query)
+    @commands.command(name="query")
+    async def query_agent(self, ctx, msg: str | None = None):
+        if msg:
+            self.logger.debug(f"Queried Agent: {msg}")
+            await ctx.send(msg)
+        else:
+            self.logger.debug(f"Didnt enter a message")
+            await ctx.send("Enter a message")
 
         
         
