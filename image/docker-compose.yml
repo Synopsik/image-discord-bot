@@ -1,14 +1,19 @@
 services:
   api:
     build: ./api
+    network_mode: "host"
     ports:
       - "8000:8000"
     environment:
       - PYTHONUNBUFFERED=1
+      - AWS_ACCESS_KEY=${AWS_ACCESS_KEY}
+      - AWS_SECRET_KEY=${AWS_SECRET_KEY}
+      - OLLAMA_BASE_URL=${OLLAMA_BASE_URL}
   bot:
     build: ./bot
+    network_mode: "host"
     environment:
       - BOT_TOKEN=${BOT_TOKEN}
-      - LOCAL_ENV=${LOCAL_ENV}
+      - API_URL=${API_URL}
     depends_on:
       - api
