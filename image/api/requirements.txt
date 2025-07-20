@@ -1,7 +1,8 @@
-pydantic
 uvicorn
 fastapi
 mangum
-python-dotenv
-discord.py
-asyncpg
+pydantic
+langchain
+langchain-ollama
+langchain-aws
+langchain-community
