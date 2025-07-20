@@ -3,7 +3,7 @@ import os
 import uvicorn
 from fastapi import FastAPI
 from mangum import Mangum
-from api_router import api_router
+from util.api_router import api_router
 
 app = FastAPI(
     title="AWS Discord Bot",
