@@ -10,7 +10,8 @@ class AttachmentEnum(str, Enum):
     code = "code"
     
 class Query(BaseModel):
-    query: str = "Waduhek?"
-    attachments: list[AttachmentEnum] | None = None # Needs to be refactored for attachments w/ other
+    content: str = "Waduhek?"
+    llm: str = "ollama"
+    model: str = "deepseek-r1:8b"
     show_thoughts: bool = False # Provide thoughts in response, formatted cleanly
     
