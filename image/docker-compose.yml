@@ -2,8 +2,6 @@ services:
   api:
     build: ./api
     network_mode: "host"
-    ports:
-      - "8000:8000"
     environment:
       - PYTHONUNBUFFERED=1
       - AWS_ACCESS_KEY=${AWS_ACCESS_KEY}
