@@ -61,3 +61,7 @@ class GamesCog(commands.Cog, name="Games"):
             outcome = "I win!"
         await ctx.send(f"You chose **{choice}**, I chose **{bot_choice}**. {outcome}")
         self.logger.info(f"{ctx.author} chose {choice}, I chose {bot_choice}. {outcome}")
+
+
+async def setup(bot):
+    await bot.add_cog(GamesCog(bot, bot.logger))

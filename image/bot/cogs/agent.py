@@ -6,7 +6,7 @@ import discord
 from discord.ext import commands
 from discord import app_commands
 
-from util.api_utils import query_post
+from util.api_utils import query_post, models_get
 from util.message_utils import send_message
 
 class AgentCog(commands.Cog, name="Agent"):
@@ -51,6 +51,22 @@ class AgentCog(commands.Cog, name="Agent"):
                 await ctx.send("Enter a message")
         except Exception as e:
             self.logger.error(e)
+        
             
-            
-                    
+    @commands.command(name="models")
+    async def get_models(self, ctx, *model):
+        models = await models_get(self.logger)
+        try:
+            async with ctx.typing():
+                await ctx.send(f"**Current AI**\n"
+                               f"*Bot:* {self.bot.llm}\n"
+                               f"*Model:* {self.bot.model}\n\n"
+                               f"*Models List:*\n"
+                               f"{models}")
+        except Exception as e:
+            self.logger.error(f"Agent Cog::get_models:: {e}")
+        if model:
+            pass # TODO Implement changing models
+    
+async def setup(bot):
+    await bot.add_cog(AgentCog(bot, bot.logger))

@@ -59,4 +59,8 @@ class GeneralCog(commands.Cog, name="General"):
             logger=self.logger
         )
         await ctx.send(response["health"])
-        
+
+
+async def setup(bot):
+    await bot.add_cog(GeneralCog(bot, bot.logger))
+

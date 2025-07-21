@@ -64,3 +64,7 @@ class LoggingCog(commands.Cog, name="Logging"):
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
         self.logger.error(f"Command error: {ctx.prefix}{error}")
+
+
+async def setup(bot):
+    await bot.add_cog(LoggingCog(bot, bot.logger))

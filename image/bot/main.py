@@ -6,6 +6,8 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 from dotenv import load_dotenv
+from cogwatch import watch
+
 load_dotenv()
 
 from util.logging_utils import setup_logging
@@ -13,6 +15,7 @@ from cogs.agent import AgentCog
 from cogs.logging import LoggingCog
 from cogs.general import GeneralCog
 from cogs.games import GamesCog
+from cogs.admin import AdminCog
 
 class DiscordBot(commands.Bot):
     def __init__(self, *cogs):
@@ -47,23 +50,8 @@ class DiscordBot(commands.Bot):
         except Exception as e:
             print(f"Failed to configure logger. Error: {e}")
             
-        try:
-            for cog in self.cogs_list:
-                match cog:
-                    case "general":
-                        await self.add_cog(GeneralCog(self, self.logger))
-                    case "games":
-                        await self.add_cog(GamesCog(self, self.logger))
-                    case "logging":
-                        await self.add_cog(LoggingCog(self, self.logger))
-                    case "agent":
-                        await self.add_cog(AgentCog(self, self.logger))
-                    case _:
-                        # Default case: if no names matches, no cog is added
-                        self.logger.error(f"Cog {cog} not found.")
-        except Exception as e:
-            self.logger.error(f"Couldn't load cog: {e}")
             
+    @watch(path='cogs', preload=True)
     async def on_ready(self):
         guild_id = os.getenv("GUILD_ID")
         if guild_id:
@@ -87,5 +75,6 @@ if __name__ == "__main__":
         "agent",
         "logging",
         "general",
-        "games"
+        "games",
+        "admin"
     )
