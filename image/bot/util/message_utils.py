@@ -1,6 +1,11 @@
 import textwrap
+import re
 
 
+async def parse_args(message: str):
+    pattern = r'(\w+)=([^\s=]+)'
+    matches = re.findall(pattern, message)
+    return dict(matches)
 
 
 def format_text(message: str,  max_length: int = 1900) -> list[str]:
