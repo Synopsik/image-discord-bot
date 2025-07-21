@@ -8,9 +8,11 @@ from discord.ext import commands
 from dotenv import load_dotenv
 load_dotenv()
 
-from image.util.logging_utils import setup_logging
-from image.bot.cogs.agent import AgentCog
-from image.bot.cogs.logging import LoggingCog
+from util.logging_utils import setup_logging
+from cogs.agent import AgentCog
+from cogs.logging import LoggingCog
+from cogs.general import GeneralCog
+from cogs.games import GamesCog
 
 class DiscordBot(commands.Bot):
     def __init__(self, *cogs):
@@ -20,6 +22,8 @@ class DiscordBot(commands.Bot):
         self.logger_name = "Discord Logger"
         self.prefix = "/"
         self.description = "A Discord bot that has multipurpose utility"
+        self.llm = "ollama"
+        self.model = "deepseek-r1:7b"
         
         # intents config
         intents = discord.Intents.default()
@@ -35,7 +39,7 @@ class DiscordBot(commands.Bot):
         
         self.run(os.getenv("BOT_TOKEN"))
         
-    async def setup_hook(self) -> None:
+    async def setup_hook(self):
         # Need to create an implementation for AWS DynamoDB to hold Discord logs
         try:
             loop = asyncio.get_running_loop()
@@ -46,10 +50,10 @@ class DiscordBot(commands.Bot):
         try:
             for cog in self.cogs_list:
                 match cog:
-                    # case "general":
-                    #     await self.add_cog(GeneralCog(self, self.logger))
-                    # case "games":
-                    #     await self.add_cog(GamesCog(self, self.logger))
+                    case "general":
+                        await self.add_cog(GeneralCog(self, self.logger))
+                    case "games":
+                        await self.add_cog(GamesCog(self, self.logger))
                     case "logging":
                         await self.add_cog(LoggingCog(self, self.logger))
                     case "agent":
@@ -58,12 +62,12 @@ class DiscordBot(commands.Bot):
                         # Default case: if no names matches, no cog is added
                         self.logger.error(f"Cog {cog} not found.")
         except Exception as e:
-            print(f"Couldn't load cogs: {e}")
+            self.logger.error(f"Couldn't load cog: {e}")
             
     async def on_ready(self):
         guild_id = os.getenv("GUILD_ID")
         if guild_id:
-            await self.tree.sync(guild=discord.Object(id=int(guild_id)))
+            await self.tree.sync(guild=discord.Object(id=int(guild_id))) # This seems like it isn't working
             self.logger.debug(f"Synced Tree Commands with guild: {guild_id}")
         else:
             await self.tree.sync()
@@ -81,5 +85,7 @@ class DiscordBot(commands.Bot):
 if __name__ == "__main__":
     DiscordBot(
         "agent",
-        "logging"
+        "logging",
+        "general",
+        "games"
     )

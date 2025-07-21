@@ -1,0 +1,8 @@
+uvicorn
+fastapi
+mangum
+pydantic
+langchain
+langchain-ollama
+langchain-aws
+langchain-community

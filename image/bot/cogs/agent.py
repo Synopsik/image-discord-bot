@@ -6,7 +6,8 @@ import discord
 from discord.ext import commands
 from discord import app_commands
 
-from image.util.api_utils import query
+from util.api_utils import query_post
+from util.message_utils import send_message
 
 class AgentCog(commands.Cog, name="Agent"):
     def __init__(self, bot, logger):
@@ -21,14 +22,35 @@ class AgentCog(commands.Cog, name="Agent"):
         
     
     @commands.command(name="query")
-    async def query_agent(self, ctx, msg: str | None = None):
-        if msg:
-            self.logger.debug(f"Queried Agent: {msg}")
-            await ctx.send(msg)
-        else:
-            self.logger.debug(f"Didnt enter a message")
-            await ctx.send("Enter a message")
+    async def query_agent(self, ctx, *msg):
+        """
+        Handles the query command to process user input and respond with the
+        message or inform the user if no message is provided.
 
-        
-        
-                
+        :param ctx: The context of the command invocation, typically includes
+                    information about its usage and the channel.
+        :param msg: A tuple containing parts of the message passed with the
+                    command. This is processed and joined into a single string.
+        :return: None, as the function sends messages directly to the context.
+        """
+        try:
+            if msg:
+                msg = " ".join(msg) # Convert msg tuple to single string, delimits words using spaces 
+                self.logger.debug(f"Queried Agent: {self.bot.llm} ({self.bot.model})")
+                async with ctx.typing():
+                    response = await query_post(
+                        prompt=msg,
+                        llm=self.bot.llm,
+                        model=self.bot.model,
+                        logger=self.logger
+                    )
+                    self.logger.debug(response)
+                    await send_message(ctx=ctx, message=response, logger=self.logger) # Send the converted message
+            else:
+                self.logger.debug(f"Didnt enter a message")
+                await ctx.send("Enter a message")
+        except Exception as e:
+            self.logger.error(e)
+            
+            
+                    
