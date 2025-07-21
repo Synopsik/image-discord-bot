@@ -110,11 +110,13 @@ async def health_get(logger, verbosity: int = 1):
 
 
 async def models_get(logger):
+    # Need to update the /agent/models endpoint to return a dict of llms and models
     models = await _get(content={}, endpoint="/agent/models", logger=logger) 
-    
+    # That way we can parse out llm's into a dict in a list
     models = [x['name'] for x in models['models']]
     
-    return "\n".join(models)
+    return models
+    # return "\n".join(models) Allow calling method to format text instead of defining string
 '''
 {
 'models': 
