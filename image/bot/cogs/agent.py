@@ -15,7 +15,7 @@ class AgentCog(commands.Cog, name="Agent"):
         self.bot = bot
         self.logger = logger
         
-        
+    
         
     @commands.Cog.listener()
     async def on_ready(self):
@@ -24,6 +24,7 @@ class AgentCog(commands.Cog, name="Agent"):
     
     @commands.command(name="query")
     async def query(self, ctx, *msg):
+        # Need to add attachment handling image, audio, text, etc
         try:
             if msg:
                 msg = " ".join(msg) # Convert msg tuple to single string, delimits words using spaces 
@@ -39,7 +40,7 @@ class AgentCog(commands.Cog, name="Agent"):
                     await send_message(ctx=ctx, message=response, logger=self.logger) # Send the converted message
             else:
                 self.logger.debug(f"Didnt enter a message")
-                await ctx.send("Enter a message")
+                await ctx.send("Enter a query")
         except Exception as e:
             self.logger.error(e)
         
@@ -77,6 +78,8 @@ class AgentCog(commands.Cog, name="Agent"):
                 async with ctx.typing():
                     ollama_models = "\n".join([f'model={model}' for model in models]) # in models["ollama"]
                     
+                    # It would be better to refactor this so that we loop through 
+                    # available LLMs and use a template to print each
                     await ctx.send(f"__***Current AI***__\n"
                                    f"*LLM:* {self.bot.llm}\n"
                                    f"*Model:* {self.bot.model}\n\n"
