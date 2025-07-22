@@ -84,18 +84,18 @@ DB_URL=your_database_connection_string
 1. **Use Docker Compose**
 ```shell script
 cd image
-   docker-compose up --build
+docker-compose up --build
 ```
 
 2. **Run the API individually (alternative)**
 ```shell script
 cd image/api
-   python main.py
+python main.py
 ```
 
 3. **Run the Discord bot individually (alternative)**
 ```shell script
 cd image/bot
-   python main.py
+python main.py
 ```
 
