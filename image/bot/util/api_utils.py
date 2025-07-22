@@ -114,16 +114,6 @@ async def models_get(logger):
     models = await _get(content={}, endpoint="/agent/models", logger=logger) 
     # That way we can parse out llm's into a dict in a list
     models = [x['name'] for x in models['models']]
-    
     return models
-    # return "\n".join(models) Allow calling method to format text instead of defining string
-'''
-{
-'models': 
-    [
-        {'name': 'deepseek-r1:8b', 'model': 'deepseek-r1:8b', 'modified_at': '2025-07-21T01:45:35.092279747Z', 'size': 5225376047, 'digest': '6995872bfe4c521a67b32da386cd21d5c6e819b6e0d62f79f64ec83be99f5763', 'details': {'parent_model': '', 'format': 'gguf', 'family': 'qwen3', 'families': ['qwen3'], 'parameter_size': '8.2B', 'quantization_level': 'Q4_K_M'}}, 
-        {'name': 'deepseek-coder:6.7b', 'model': 'deepseek-coder:6.7b', 'modified_at': '2025-07-21T01:45:35.092279747Z', 'size': 3827834503, 'digest': 'ce298d984115b93bb1b191b47fee6b39e4e9fbd5f18e651c02f9fa74e0edcd13', 'details': {'parent_model': '', 'format': 'gguf', 'family': 'llama', 'families': ['llama'], 'parameter_size': '7B', 'quantization_level': 'Q4_0'}}, 
-        {'name': 'deepseek-r1:7b', 'model': 'deepseek-r1:7b', 'modified_at': '2025-07-21T01:45:35.092279747Z', 'size': 4683075440, 'digest': '755ced02ce7befdb13b7ca74e1e4d08cddba4986afdb63a480f2c93d3140383f', 'details': {'parent_model': '', 'format': 'gguf', 'family': 'qwen2', 'families': ['qwen2'], 'parameter_size': '7.6B', 'quantization_level': 'Q4_K_M'}}
-    ]
-}
-'''
+
+
