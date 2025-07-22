@@ -1,8 +1,18 @@
-# AWS Discord Bot
+# Discord Bot Image
 
-A Discord bot application built with FastAPI and deployed on AWS using CDK infrastructure.
+A Discord bot deployed using Docker, built using FastAPI and Discord.py 
 
-## 🏗️ Architecture
+## TODO
+- Implement AWS functionality
+- Implement Agent functionality
+- Implement RAG functionality
+- Implement attachments
+- Finalize README documentation
+- Finalize basic bot functionality
+- ~~Implement basic AI query functionality~~ (7/20/25)
+- ~~Local Testing~~ (7/20/25)
+
+## Architecture
 
 This project consists of three main components:
 
@@ -10,39 +20,21 @@ This project consists of three main components:
 - **FastAPI API** - REST API backend for bot operations and external integrations
 - **AWS CDK Infrastructure** - TypeScript-based infrastructure as code for AWS deployment
 
-## 📁 Project Structure
-```
-
-├── image/                   # Main application code
-│   ├── api/                 # FastAPI REST API
-│   │   ├── endpoints/       # API endpoints
-│   │   └── main.py         # FastAPI application entry point
-│   ├── bot/                 # Discord bot implementation
-│   │   └── cogs/           # Discord bot command groups
-│   ├── util/               # Shared utilities
-│   ├── .env.sample         # Environment variables template
-│   └── docker-compose.yml  # Local development setup
-├── cdk-infra/              # AWS CDK infrastructure code
-│   ├── bin/                # CDK app entry points
-│   ├── lib/                # CDK stack definitions
-│   └── test/               # Infrastructure tests
-└── README.md               # This file
-```
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
-
-- Python 3.13.5
-- Node.js with npm
-- AWS CLI configured
+- Python 3.13
 - Discord Bot Token
+- Ollama server
 - AWS Account
+- AWS CLI configured
+- Node.js with npm
 
 ### Environment Setup
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/Synopsik/discord-bot-image.git
    cd aws-discord-bot
    ```
 
@@ -81,105 +73,25 @@ DB_URL=your_database_connection_string
 ```
 
 
-## 🛠️ Development
+## Development
 
 ### Local Development
 
-1. **Run the API locally**
+1. **Use Docker Compose**
 ```shell script
 cd image
-   python -m uvicorn api.main:app --reload --host 0.0.0.0 --port 8000
+   docker-compose up --build
 ```
 
-
-2. **Run the Discord bot**
+2. **Run the API individually (alternative)**
 ```shell script
-cd image
-   python bot/main.py
+cd image/api
+   python main.py
 ```
 
-
-3. **Use Docker Compose (alternative)**
+3. **Run the Discord bot individually (alternative)**
 ```shell script
-cd image
-   docker-compose up
+cd image/bot
+   python main.py
 ```
-
-
-### Testing
-
-Run tests for the infrastructure:
-```shell script
-cd cdk-infra
-npm test
-```
-
-
-## 📦 Deployment
-
-### AWS Infrastructure
-
-1. **Bootstrap CDK (first time only)**
-```shell script
-cd cdk-infra
-   npx cdk bootstrap
-```
-
-
-2. **Deploy infrastructure**
-```shell script
-cd cdk-infra
-   npx cdk deploy
-```
-
-
-### Application Deployment
-
-The application is containerized and deployed to AWS Lambda using the Mangum adapter for FastAPI.
-
-## 🤖 Discord Bot Features
-
-The bot includes several cogs with different functionalities:
-
-- **Logging Cog** - Comprehensive server activity logging
-    - Message tracking (create, edit, delete)
-    - Member activity (join, leave, updates)
-    - Command execution logging
-    - Reaction tracking
-
-- **General Commands** - Basic bot functionality
-- **Agent Commands** - AI integration capabilities
-- **Games** - Gaming-related features
-
-## 🔧 API Endpoints
-
-The FastAPI application provides:
-
-- Health check endpoints
-- Query processing with AI integration
-- Reset functionality
-- Bot management endpoints
-
-## 📊 Monitoring & Logging
-
-The application includes comprehensive logging capabilities:
-
-- Discord activity logging
-- Command execution tracking
-- Error handling and reporting
-- Timestamp formatting utilities
-
-## 🧪 Testing
-
-- Infrastructure tests using Jest
-- API endpoint testing
-- Bot functionality testing
-
-## 📄 License
-
-[Add your license information here]
-
-## 🤝 Contributing
-
-[Add contributing guidelines here]
 
