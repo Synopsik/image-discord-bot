@@ -42,6 +42,10 @@ This project consists of three main components:
    ```bash
    python -m venv .venv
    source .venv/bin/activate  # On Windows: .venv\Scripts\activate
+   cd image/bot
+   pip install -r requirements.txt
+   cd ../..
+   cd image/api
    pip install -r requirements.txt
    ```
 
