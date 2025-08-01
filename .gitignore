@@ -5,3 +5,6 @@
 /.idea/modules.xml
 /.idea/inspectionProfiles/Project_Default.xml
 /.idea/discord.xml
+/.idea/image-discord-bot.iml
+/image/bot/util/database/logs.db
+/.idea/inspectionProfiles/profiles_settings.xml

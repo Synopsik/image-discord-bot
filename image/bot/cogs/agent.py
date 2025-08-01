@@ -1,4 +1,5 @@
 import os
+import logging
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -9,17 +10,17 @@ from discord import app_commands
 from util.api_utils import query_post, models_get
 from util.message_utils import send_message, parse_args
 
+logger = logging.getLogger(__name__)
 
 class AgentCog(commands.Cog, name="Agent"):
-    def __init__(self, bot, logger):
+    def __init__(self, bot):
         self.bot = bot
-        self.logger = logger
         
     
         
     @commands.Cog.listener()
     async def on_ready(self):
-        self.logger.debug("Loaded Agent Cog")
+        logger.debug("Loaded Agent Cog")
         
     
     @commands.command(name="query")
@@ -28,28 +29,28 @@ class AgentCog(commands.Cog, name="Agent"):
         try:
             if msg:
                 msg = " ".join(msg) # Convert msg tuple to single string, delimits words using spaces 
-                self.logger.debug(f"Queried Agent: {self.bot.llm} ({self.bot.model})")
+                logger.debug(f"Queried Agent: {self.bot.llm} ({self.bot.model})")
                 async with ctx.typing():
                     response = await query_post(
                         prompt=msg,
                         llm=self.bot.llm,
                         model=self.bot.model,
-                        logger=self.logger
+                        logger=logger
                     )
-                    self.logger.debug(response)
-                    await send_message(ctx=ctx, message=response, logger=self.logger) # Send the converted message
+                    logger.debug(response)
+                    await send_message(ctx=ctx, message=response, logger=logger) # Send the converted message
             else:
-                self.logger.debug(f"Didnt enter a message")
+                logger.debug(f"Didnt enter a message")
                 await ctx.send("Enter a query")
         except Exception as e:
-            self.logger.error(e)
+            logger.error(e)
         
             
     @commands.command(name="model")
     async def model(self, ctx, *args):
         
-        self.logger.debug(f"Models arguments: {args}")
-        models = await models_get(self.logger)
+        logger.debug(f"Models arguments: {args}")
+        models = await models_get(logger)
         
         if args:
             content = " ".join(args)
@@ -60,7 +61,7 @@ class AgentCog(commands.Cog, name="Agent"):
                 try:
                     if parsed["llm"] and parsed["model"]:
                         if parsed["model"] in models: 
-                            self.logger.debug(f"Parsed model: {parsed["model"]}")
+                            logger.debug(f"Parsed model: {parsed["model"]}")
                             self.bot.llm = parsed["llm"]
                             self.bot.model = parsed["model"]
                             
@@ -93,7 +94,7 @@ class AgentCog(commands.Cog, name="Agent"):
                                    f"`llm=bedrock`\n"
                                    f"")
             except Exception as e:
-                self.logger.error(f"Agent Cog::get_models:: {e}")
+                logger.error(f"Agent Cog::get_models:: {e}")
         
 async def setup(bot):
-    await bot.add_cog(AgentCog(bot, bot.logger))
+    await bot.add_cog(AgentCog(bot))

@@ -1,16 +1,18 @@
 import discord
 from discord.ext import commands
+import logging
+logger = logging.getLogger(__name__)
 
 
 class AdminCog(commands.Cog, name="Admin"):
-    def __init__(self, bot, logger):
+    def __init__(self, bot):
         self.bot = bot
-        self.logger = logger
         
         
     @commands.Cog.listener()
     async def on_ready(self):
-        self.logger.debug("Loaded Admin Cog")
+        logger.debug("Loaded Admin Cog")
+        
         
         
     @commands.command(name="clear")
@@ -26,8 +28,8 @@ class AdminCog(commands.Cog, name="Admin"):
                         await message.delete()
                         count+=1
                 await ctx.send(f"Deleted {count} of my messages")
-                self.logger.info(f"Deleted {count} of my messages")
+                logger.info(f"Deleted {count} of my messages")
 
 
 async def setup(bot):
-    await bot.add_cog(AdminCog(bot, bot.logger))
+    await bot.add_cog(AdminCog(bot))

@@ -1,22 +1,23 @@
 import random
+import logging
 from discord.ext import commands
-from cogs.logging import get_formatted_time
+
+logger = logging.getLogger(__name__)
 
 class GamesCog(commands.Cog, name="Games"):
-    def __init__(self, bot, logger):
+    def __init__(self, bot):
         self.bot = bot
-        self.logger = logger
 
     @commands.Cog.listener()
     async def on_ready(self):
-        self.logger.debug("Loaded Games Cog")
+        logger.debug("Loaded Games Cog")
 
 
     @commands.command(name="coinflip")
     async def coinflip(self, ctx):
         result = random.choice(["Heads", "Tails"])
         await ctx.send(f"The coin landed on **{result}**")
-        self.logger.info(f"The coin landed on {result}")
+        logger.info(f"The coin landed on {result}")
 
 
     @commands.command(name="rps")
@@ -40,8 +41,8 @@ class GamesCog(commands.Cog, name="Games"):
         else:
             outcome = "I win!"
         await ctx.send(f"You chose **{choice}**, I chose **{bot_choice}**. {outcome}")
-        self.logger.info(f"{ctx.author} chose {choice}, I chose {bot_choice}. {outcome}")
+        logger.info(f"{ctx.author} chose {choice}, I chose {bot_choice}. {outcome}")
 
 
 async def setup(bot):
-    await bot.add_cog(GamesCog(bot, bot.logger))
+    await bot.add_cog(GamesCog(bot))

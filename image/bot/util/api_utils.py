@@ -3,11 +3,12 @@ import os
 import json
 from dotenv import load_dotenv
 load_dotenv()
-from logging import Logger
+import logging
+logger = logging.getLogger(__name__)
 
 BASE_URL = os.getenv("API_URL")
 
-async def _get(logger: Logger, content: dict, endpoint: str = "/"):
+async def _get(content: dict, endpoint: str = "/"):
     """
     Performs an asynchronous HTTP GET request to a specified API endpoint using `aiohttp`.
 
@@ -51,7 +52,7 @@ async def _get(logger: Logger, content: dict, endpoint: str = "/"):
         return {"error": f"Failed to create session: {str(e)}"}
 
 
-async def _post(logger: Logger, content: dict, endpoint: str = "/"):
+async def _post(content: dict, endpoint: str = "/"):
     """
     Posts JSON content to a specified API endpoint using an asynchronous
     HTTP session.
@@ -95,23 +96,23 @@ async def _post(logger: Logger, content: dict, endpoint: str = "/"):
         return {"error": f"Failed to create session: {str(e)}"}
 
 
-async def query_post(prompt, llm, model, logger, show_thoughts=False):
+async def query_post(prompt, llm, model, show_thoughts=False):
     query_payload = {
         "content": prompt,
         "llm": llm,
         "model": model,
         "show_thoughts": show_thoughts
     }
-    return await _post(content=query_payload, endpoint="/query", logger=logger)
+    return await _post(content=query_payload, endpoint="/query")
 
 
-async def health_get(logger, verbosity: int = 1):
-    return await _get(content={}, endpoint=f"/health/{verbosity}", logger=logger)
+async def health_get(verbosity: int = 1):
+    return await _get(content={}, endpoint=f"/health/{verbosity}")
 
 
-async def models_get(logger):
+async def models_get():
     # Need to update the /agent/models endpoint to return a dict of llms and models
-    models = await _get(content={}, endpoint="/agent/models", logger=logger) 
+    models = await _get(content={}, endpoint="/agent/models") 
     # That way we can parse out llm's into a dict in a list
     models = [x['name'] for x in models['models']]
     return models
