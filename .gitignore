@@ -8,3 +8,6 @@
 /.idea/image-discord-bot.iml
 /image/bot/util/database/logs.db
 /.idea/inspectionProfiles/profiles_settings.xml
+/.idea/dataSources.xml
+/image/bot/util/database/data/
+/.idea/sqldialects.xml
