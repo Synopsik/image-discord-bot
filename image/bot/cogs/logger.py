@@ -1,11 +1,13 @@
 import logging
 import os
 from dotenv import load_dotenv
+
+
 load_dotenv()
 from discord.ext import commands
-from util.database.setup_database import (
-    insert_server, insert_user, insert_channel, insert_message,
-    insert_discord_log
+from util.database.database_service import (
+    DatabaseService, insert_server, insert_user, insert_channel,
+    insert_message, insert_discord_log
 )
 
 logger = logging.getLogger(__name__)
@@ -25,37 +27,8 @@ class LoggingCog(commands.Cog, name="Logging"):
 
     async def _initialize_database(self):
         """Initialize database with current Discord entities"""
-        try:
-            # Insert all guilds (servers)
-            for guild in self.bot.guilds:
-                await insert_server(
-                    server_id=guild.id,
-                    server_name=guild.name,
-                    region=str(guild.region) if hasattr(guild, 'region') else None
-                )
-                
-                # Insert all channels in this guild
-                for channel in guild.channels:
-                    channel_type = 'text' if hasattr(channel, 'send') else 'voice'
-                    await insert_channel(
-                        channel_id=channel.id,
-                        server_id=guild.id,
-                        channel_name=channel.name,
-                        channel_type=channel_type
-                    )
-                
-                # Insert all members in this guild
-                for member in guild.members:
-                    await insert_user(
-                        user_id=member.id,
-                        username=member.name,
-                        display_name=member.display_name
-                    )
+        await DatabaseService.initialize_discord_entities(self.bot)
             
-            logger.info("Database initialized with current Discord entities")
-        except Exception as e:
-            logger.error(f"Failed to initialize database: {e}")
-
     # ----------------------------------------------------------------------------
     # Guild Events (Server management)
     # ----------------------------------------------------------------------------
@@ -197,8 +170,8 @@ class LoggingCog(commands.Cog, name="Logging"):
             channel_id=after.channel.id
         )
         
-        msg = {"content": f"Before: {before.content}\nAfter: {after.content}"}
-        await send_message(after.channel, message=msg)
+        # msg = {"content": f"Before: {before.content}\nAfter: {after.content}"}
+        # await send_message(after.channel, message=msg)
         logger.warning(f"{before.author.name} has edited a message: {before.content} -> {after.content}")
 
     @commands.Cog.listener()
@@ -236,7 +209,7 @@ class LoggingCog(commands.Cog, name="Logging"):
         )
         
         message = {"content": f"{member} just joined the server!"}
-        await send_message(self.home_channel, message)
+        # await send_message(self.home_channel, message)
         logger.debug(f"{member.name} just joined the server!")
 
     @commands.Cog.listener()
@@ -292,7 +265,8 @@ class LoggingCog(commands.Cog, name="Logging"):
             message=f"Command error: {ctx.prefix}{ctx.command} - {str(error)}",
             server_id=ctx.guild.id if ctx.guild else None,
             user_id=ctx.author.id,
-            channel_id=ctx.channel.id
+            channel_id=ctx.channel.id,
+            ctx=ctx
         )
         logger.error(f"Command error: {ctx.prefix}{error}")
 

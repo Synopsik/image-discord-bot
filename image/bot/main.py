@@ -7,19 +7,11 @@ from cogwatch import watch
 
 load_dotenv()
 
-# Suppress noisy loggers BEFORE basicConfig
-logging.getLogger('aiosqlite').setLevel(logging.WARNING)
-logging.getLogger('watchfiles.main').setLevel(logging.WARNING)
-logging.getLogger('watchfiles').setLevel(logging.WARNING)
-logging.getLogger('discord.gateway').setLevel(logging.INFO)  # Reduce WebSocket noise
-logging.getLogger('discord.client').setLevel(logging.INFO)   # Reduce client debug noise
-
 logging.basicConfig(level=logging.DEBUG)
 
-from util.database_utils import db_manager
+from util.database.database_utils import db_manager, setup_database
 from util.logging_utils import setup_logging, get_db_handler
 
-from util.database.setup_database import setup_database
 
 logger = logging.getLogger("DiscordBot")
 
