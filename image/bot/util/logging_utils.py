@@ -64,20 +64,8 @@ class SQLiteLogHandler(logging.Handler):
             return
 
         # Ignore logs from database-related modules to prevent recursion
-        if record.name in self._ignored_loggers:
-            return
-
-        # Ignore logs from any logger that contains database-related keywords
-        if any(keyword in record.name.lower() for keyword in ['sqlite', 'database', 'aiosqlite', 'watchfiles', 'gateway']):
-            return
-
-        # Filter out specific verbose messages even if they pass through
-        if 'WebSocket Event:' in record.getMessage():
-            return
-        if 'executing functools.partial' in record.getMessage():
-            return
-        if 'operation functools.partial' in record.getMessage():
-            return
+        # if record.name in self._ignored_loggers:
+        #     return
 
         try:
             self._logging_in_progress = True
@@ -175,14 +163,9 @@ class SQLiteLogHandler(logging.Handler):
                 # Print to console for debugging, but don't log to prevent recursion
                 print(f"Failed to insert logs: {e}")
             finally:
+                # No matter what, we set _logging_in_progress back to False (Logging available again)
                 self._logging_in_progress = False
-
-    def close(self):
-        """Synchronous close method for logging shutdown"""
-        self._should_stop = True
-        # Don't await here - this is called by the logging module during shutdown
-        if self._flush_task and not self._flush_task.done():
-            self._flush_task.cancel()
+                
 
     async def async_close(self):
         """Async close method for proper cleanup"""
@@ -253,13 +236,13 @@ def setup_logging(db_manager, level: int = logging.INFO):
     # Store reference for cleanup
     set_db_handler(db_handler)
 
-    # Start the database handler's flush task - FIXED: Use async version
+    # Start the database handler's async flush task
     try:
         loop = asyncio.get_event_loop()
         if loop.is_running():
             asyncio.create_task(db_handler.start_flush_task_async())
     except RuntimeError:
-        # If no event loop is running, the task will start when first log is emitted
+        # If no event loop is running, the task will start when the first log is emitted
         pass
 
     return root_logger
