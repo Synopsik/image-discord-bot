@@ -28,7 +28,6 @@ class GeneralCog(commands.Cog, name="General"):
     async def health_check(self, ctx, verbosity = 1):
         response = await api_utils.health_get(
             verbosity=int(verbosity), 
-            logger=logger
         )
         await ctx.send(response["health"])
 

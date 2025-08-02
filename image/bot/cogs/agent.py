@@ -35,10 +35,9 @@ class AgentCog(commands.Cog, name="Agent"):
                         prompt=msg,
                         llm=self.bot.llm,
                         model=self.bot.model,
-                        logger=logger
                     )
                     logger.debug(response)
-                    await send_message(ctx=ctx, message=response, logger=logger) # Send the converted message
+                    await send_message(ctx=ctx, message=response) # Send the converted message
             else:
                 logger.debug(f"Didnt enter a message")
                 await ctx.send("Enter a query")
